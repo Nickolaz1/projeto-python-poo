@@ -4,5 +4,5 @@ class Contribuidor(Usuario):
     def __init__(self, id, nome, senha):
         super().__init__(id, nome, senha)
 
-    def pode_publicar():
-        True
+    def pode_publicar(self):
+        return True

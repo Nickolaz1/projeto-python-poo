@@ -1,26 +1,25 @@
-from app.models.produto import carregar_produtos
+from app.models.usuario import carregar_usuarios
 
-class AutenticacaoController:
+class AuthController:
     def __init__(self):
-        self._produtos = carregar_produtos()
+        self._usuarios = carregar_usuarios()
 
-    def listar(self):
-        return [self._para_dicionario(p) for p in self._produtos]
-
-    def listar_por_categoria(self, categoria):
-        produtos = [p for p in self._produtos if p.pertence_a(categoria)]
-        return [self._para_dicionario(p) for p in produtos]
-
-    def buscar(self, id):
-        for produto in self._produtos:
-            if produto.mostrar_id() == id:
-                return self._para_dicionario(produto)
+    def login(self, nome, senha):
+        for usuario in self._usuarios:
+            if usuario.mostrar_nome() == nome: 
+                if usuario.conferir_senha(senha):
+                    return self._para_dicionario(usuario)
         return None
 
-    def _para_dicionario(self, produto):
+    def _para_dicionario(self, usuario):
         return {
-            'id': produto.mostrar_id(),
-            'nome': produto.mostrar_nome(),
-            'categoria': produto.mostrar_categoria(),
-            'preco': produto.mostrar_preco(),
+            'id': usuario.mostrar_id(),
+            'nome': usuario.mostrar_nome(),
+            'perfil': usuario.mostrar_perfil(),
+            'permissoes': {
+                'favoritar': usuario.pode_favoritar(),
+                'publicar': usuario.pode_publicar(),
+                'moderar': usuario.pode_moderar()
+            }
         }
+
